@@ -43,3 +43,42 @@
 
 ![image](https://user-images.githubusercontent.com/60100532/172399563-2003b4ec-7b3e-49ad-ab63-27cfc573453b.png)
 
+
+## 2022/ 06/ 08
+
+* ### 주문과 할인 도메인 설계
+
+    1. 주문과 할인 정책
+       - 회원은 상품을 주문할 수 있다.
+       - 회원 등급에 따라 할인 정책을 적용할 수 있다.
+       - 할인 정책은 모든 VIP는 1000원을 할인해주는 고정 금액 할인을 적용해달라. (나중에 변경 될 수 있다.)
+       - 할인 정책은 변경 가능성이 높다. 회사의 기본 할인 정책을 아직 정하지 못했고, 오픈 직전까지 고민을
+         미루고 싶다. 최악의 경우 할인을 적용하지 않을 수 도 있다. (미확정)
+
+![image](https://user-images.githubusercontent.com/60100532/172598205-9becae48-16d1-46e1-9a8c-7d3a8af935ea.png)
+
+
+![image](https://user-images.githubusercontent.com/60100532/172598742-29470312-a250-449b-ac77-c14ff722c051.png)
+1. 주문 생성: 클라이언트는 주문 서비스에 주문 생성을 요청한다.
+2. 회원 조회: 할인을 위해서는 회원 등급이 필요하다. 그래서 주문 서비스는 회원 저장소에서 회원을
+   조회한다.
+3. 할인 적용: 주문 서비스는 회원 등급에 따른 할인 여부를 할인 정책에 위임한다.
+4. 주문 결과 반환: 주문 서비스는 할인 결과를 포함한 주문 결과를 반환한다
+
+
+
+
+#### 회원클래스 다이어그램
+![image](https://user-images.githubusercontent.com/60100532/172599279-ad253d3c-4a06-4d3c-83f7-14cb81ec603b.png)
+
+역할과 구현을 분리해서 자유롭게 구현 객체를 조립할 수 있게 설계했다. 덕분에 회원 저장소는 물론이고,
+할인 정책도 유연하게 변경할 수 있다.
+
+
+
+![image](https://user-images.githubusercontent.com/60100532/172599778-ea6485d4-47d9-4913-919f-4e272b92d4be.png)
+
+![image](https://user-images.githubusercontent.com/60100532/172599823-aaa45eda-9dec-425f-bb22-b9304bb517ad.png)
+
+![image](https://user-images.githubusercontent.com/60100532/172600197-467d1e8d-e05e-4c3c-991b-d11255ab7d74.png)
+
