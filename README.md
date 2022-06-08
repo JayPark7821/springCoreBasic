@@ -94,4 +94,29 @@
   - 순진 개발자: … (하지만 난 유연한 설계가 가능하도록 객체지향 설계 원칙을 준수했지 후후
 
 
+* ### 새로운 할인 정책 적용과 문제점
 
+![image](https://user-images.githubusercontent.com/60100532/172649902-d4aa0dc0-0329-4d55-aa04-c3c2e4baab5d.png)
+
+ 
+클래스 의존관계를 분석해 보면. 추상(인터페이스) 뿐만 아니라 구체(구현) 클래스에도 의존하고 있다.
+추상(인터페이스) 의존: DiscountPolicy
+구체(구현) 클래스: FixDiscountPolicy , RateDiscountPolicy
+
+OCP: 변경하지 않고 확장할 수 있다고 했는데!
+지금 코드는 기능을 확장해서 변경하면, 클라이언트 코드에 영향을 준다! 따라서 OCP를 위반!!!
+
+
+![image](https://user-images.githubusercontent.com/60100532/172650795-eae7e74e-8320-4d5f-8aad-0ba9da60f69a.png)
+
+![image](https://user-images.githubusercontent.com/60100532/172650918-6151d7f8-be58-4246-8135-c3dabe4a582f.png)
+
+* ### 어떻게 문제를 해결할 수 있을까?
+  - 클라이언트 코드인 OrderServiceImpl 은 DiscountPolicy 의 인터페이스 뿐만 아니라 구체 클래스도 함께 의존한다.
+  - 그래서 구체 클래스를 변경할 때 클라이언트 코드도 함께 변경해야 한다.
+  - DIP 위반 추상에만 의존하도록 변경(인터페이스에만 의존)
+  - DIP를 위반하지 않도록 인터페이스에만 의존하도록 의존관계를 변경하면 된다
+
+- 해 결 방 안
+  - 이 문제를 핵결하려면 누군가가 클라이언트인 OrderServiceImpl에 DiscountPolicy 객체를 대신 생성하고 주입해주어야 한다.
+  
