@@ -119,4 +119,18 @@ OCP: 변경하지 않고 확장할 수 있다고 했는데!
 
 - 해 결 방 안
   - 이 문제를 핵결하려면 누군가가 클라이언트인 OrderServiceImpl에 DiscountPolicy 객체를 대신 생성하고 주입해주어야 한다.
-  
+
+
+## 2022/ 06/ 09
+
+* ### DIP를 지키기 
+
+  - AppConfig 생성에서 어플리케이션의 실제 동작에 필요한 구현 객체를 생성해
+    생성자 주입(연결)해줘 기존 추상과 구현 모두 의존하던 MemberServiceImpl 와 OrderServiceImpl은 단지 각 인터페이스에만 의존하도록 되었다.
+  - 각 MemberServiceImpl 와 OrderServiceImpl의 입장에서 생성자를 통해 어떤 구현 객체가 들어올지(주입될지)는 알 수 없다.
+  - 생성자를 통해서 어떤 구현 객체가 주입될지는 오직 외부 (AppConfig)에서 결정된다.
+  - MemberServiceImpl 와 OrderServiceImpl은 이제 의존관계에 대한 고민은 외부에 맡기고 실행에만 집중하면된다.
+
+![image](https://user-images.githubusercontent.com/60100532/172851578-10107472-b89c-40c3-a8dc-86b89eae7f0f.png)
+
+![image](https://user-images.githubusercontent.com/60100532/172851864-b36095ab-fdb5-4e17-8c3b-88b3e10830b3.png)
