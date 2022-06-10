@@ -198,5 +198,31 @@ OCP: 변경하지 않고 확장할 수 있다고 했는데!
   * 이전에는 개발자가 필요한 객체를 AppConfig 를 사용해서 직접 조회했지만, 이제부터는 스프링
     컨테이너를 통해서 필요한 스프링 빈(객체)를 찾아야 한다. 스프링 빈은 applicationContext.getBean() 메서드를 사용해서 찾을 수 있다.
   * 기존에는 개발자가 직접 자바코드로 모든 것을 했다면 이제부터는 스프링 컨테이너에 객체를 스프링 빈으로 등록하고, 스프링 컨테이너에서 스프링 빈을 찾아서 사용하도록 변경되었다
-    
 
+
+## 2022/ 06/ 10
+
+  > // 스프링 컨테이너 생성
+  > 
+  > ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+  > 
+- ApplicationContext를 스프링 컨테이너라 한다.
+- ApplicationContext는 인터페이스다.
+- 스프링 컨테이너는 XML을 기반으로 만들 수 있고, 애노테이션 기반의 자바 설정 클래스로 만들 수 있다.
+- 직전에 AppConfig 를 사용했던 방식이 애노테이션 기반의 자바 설정 클래스로 스프링 컨테이너를 만든
+  것이다. 
+- 자바 설정 클래스를 기반으로 스프링 컨테이너( ApplicationContext )를 만들어보자.
+  new AnnotationConfigApplicationContext(AppConfig.class);
+  이 클래스는 ApplicationContext 인터페이스의 구현체이다.
+
+![image](https://user-images.githubusercontent.com/60100532/173075957-a2400f23-d006-47bc-9cc7-67c67b762d0d.png)
+
+ - 빈 이름은 메서드 이름을 사용한다.
+ - 빈 이름을 직접 부여할 수 도 있다. 
+  > @Bean(name="memberService") 
+
+![image](https://user-images.githubusercontent.com/60100532/173077215-ec7ab7ff-73fc-4a01-a913-82a47ef050ce.png)
+
+* ### 스프링 빈 조회
+
+![image](https://user-images.githubusercontent.com/60100532/173085563-783ba8af-c246-4b69-83d5-70d57ae09610.png)
