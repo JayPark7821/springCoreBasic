@@ -379,3 +379,95 @@ AppConfig 클래스를 상속받은 임의의 다른 클래스를 만들고, 그
 > 참고 AppConfig@CGLIB는 AppConfig의 자식 타입이므로, AppConfig 타입으로 조회 할 수 있다.
 
 ![image](https://user-images.githubusercontent.com/60100532/173173445-fd17180b-1ae5-4f1f-8518-1fb119539646.png)
+
+
+* ## 컴포넌트 스캔과 의존관계 자동 주입 시작하기
+  * 지금까지 스프링 빈을 등록할 때는 자바 코드의 @Bean이나 XML 등을 통해서 설정 정보에직접 등록할 스프링 빈을 나열했다.
+  * 예제에서는 몇개가 안되었지만, 이렇게 등록해야 할 스프링 빈이 수십, 수백개가 되면 일일이 등록하기도 귀찮고, 설정 정보도 커지고, 누락하는 문제도 발생한다. 역시 개발자는 반복을 싫어한다.(무엇보다 귀찮다
+  ㅠㅠ)
+  * 그래서 스프링은 설정 정보가 없어도 자동으로 스프링 빈을 등록하는 컴포넌트 스캔이라는 기능을 제공한다.
+  * 또 의존관계도 자동으로 주입하는 @Autowired 라는 기능도 제공한다.
+
+
+![image](https://user-images.githubusercontent.com/60100532/173175658-1c626b62-e379-4969-9285-f3afd5a28520.png)
+
+* @ComponentScan 은 @Component 가 붙은 모든 클래스를 스프링 빈으로 등록한다.
+* 이때 스프링 빈의 기본 이름은 클래스명을 사용하되 맨 앞글자만 소문자를 사용한다.
+* 빈 이름 기본 전략: MemberServiceImpl 클래스 memberServiceImpl
+* 빈 이름 직접 지정: 만약 스프링 빈의 이름을 직접 지정하고 싶으면 @Component("memberService2") 이런식으로 이름을 부여하면 된다
+
+![image](https://user-images.githubusercontent.com/60100532/173175724-d8f80c28-c4fe-49f6-98dd-acd055115980.png)
+> @Autowired는 type으로 조회한다.
+> 
+
+![image](https://user-images.githubusercontent.com/60100532/173176104-e839c1e4-659a-413a-897f-456b9584bdbd.png)
+ 
+* >  탐색할 패키지의 시작 위치 지정
+  모든 자바 클래스를 다 컴포넌트 스캔하면 시간이 오래 걸린다. 그래서 꼭 필요한 위치부터 탐색하도록 시작
+  위치를 지정할 수 있다.
+  >
+![image](https://user-images.githubusercontent.com/60100532/173176338-fd7a6ac3-373f-44ad-8b46-1b7dd349e8d0.png)
+
+* ### 권장하는 방법
+  - 개인적으로 즐겨 사용하는 방법은 패키지 위치를 지정하지 않고, 설정 정보 클래스의 위치를 프로젝트
+  최상단에 두는 것이다. 최근 스프링 부트도 이 방법을 기본으로 제공한다.
+
+* ### 컴포넌트 스캔 기본 대상
+- 컴포넌트 스캔은 @Component 뿐만 아니라 다음과 내용도 추가로 대상에 포함한다.
+  - @Component : 컴포넌트 스캔에서 사용
+  - @Controlller : 스프링 MVC 컨트롤러에서 사용
+  - @Service : 스프링 비즈니스 로직에서 사용
+  - @Repository : 스프링 데이터 접근 계층에서 사용
+  - @Configuration : 스프링 설정 정보에서 사용
+
+- 컴포넌트 스캔의 용도 뿐만 아니라 다음 애노테이션이 있으면 스프링은 부가 기능을 수행한다.
+  - @Controller : 스프링 MVC 컨트롤러로 인식
+  - @Repository : 스프링 데이터 접근 계층으로 인식하고, 데이터 계층의 예외를 스프링 예외로 변환해준다.
+  - @Configuration : 앞서 보았듯이 스프링 설정 정보로 인식하고, 스프링 빈이 싱글톤을 유지하도록 추가 처리를 한다.
+  - @Service : 사실 @Service 는 특별한 처리를 하지 않는다. 대신 개발자들이 핵심 비즈니스 로직이 여기에 있겠구나 라고 비즈니스 계층을 인식하는데 도움이 된다.
+
+* ### 필터
+  * includeFilters : 컴포넌트 스캔 대상을 추가로 지정한다.
+  * excludeFilters : 컴포넌트 스캔에서 제외할 대상을 지정한다.
+
+![image](https://user-images.githubusercontent.com/60100532/173177594-47b7155d-84db-43b4-9a5d-63524e6cc747.png)
+
+* ### FilterType 옵션
+  FilterType은 5가지 옵션이 있다.
+
+  * ANNOTATION: 기본값, 애노테이션을 인식해서 동작한다.
+    - ex) org.example.SomeAnnotation
+  * ASSIGNABLE_TYPE: 지정한 타입과 자식 타입을 인식해서 동작한다.
+    - ex) org.example.SomeClass
+  * ASPECTJ: AspectJ 패턴 사용
+    - ex) org.example..*Service+
+  * REGEX: 정규 표현식
+    - ex) org\.example\.Default.*
+  * CUSTOM: TypeFilter 이라는 인터페이스를 구현해서 처리
+    - ex) org.example.MyTypeFilter
+
+* ### 중복 등록과 충돌
+  컴포넌트 스캔에서 같은 빈 이름을 등록하면 어떻게 될까?
+  다음 두가지 상황이 있다.
+  - 자동 빈 등록 vs 자동 빈 등록
+  - 수동 빈 등록 vs 자동 빈 등록
+
+* #### 자동 빈 등록 vs 자동 빈 등록
+  * 컴포넌트 스캔에 의해 자동으로 스프링 빈이 등록되는데, 그 이름이 같은 경우 스프링은 오류를 발생시킨다.
+    * ConflictingBeanDefinitionException 예외 발생
+
+* #### 수동 빈 등록 vs 자동 빈 등록
+![image](https://user-images.githubusercontent.com/60100532/173177954-160a8255-26c1-4392-a0f3-b70485285e5e.png)
+
+이 경우 수동 빈 등록이 우선권을 가진다.
+(수동 빈이 자동 빈을 오버라이딩 해버린다.)
+
+> 물론 개발자가 의도적으로 이런 결과를 기대했다면, 자동 보다는 수동이 우선권을 가지는 것이 좋다. 
+> 
+> 하지만  현실은 개발자가 의도적으로 설정해서 이런 결과가 만들어지기 보다는 여러 설정들이 꼬여서 이런 결과가
+만들어지는 경우가 대부분이다!
+그러면 정말 잡기 어려운 버그가 만들어진다. 항상 잡기 어려운 버그는 애매한 버그다.
+그래서 최근 스프링 부트에서는 수동 빈 등록과 자동 빈 등록이 충돌나면 오류가 발생하도록 기본 값을
+바꾸었다.
+
+![image](https://user-images.githubusercontent.com/60100532/173178088-7cb08225-f41b-481e-83bb-8e4879a03073.png)
