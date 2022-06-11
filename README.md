@@ -671,4 +671,11 @@ AppConfig 클래스를 상속받은 임의의 다른 클래스를 만들고, 그
   * close , shutdown 라는 이름의 메서드를 자동으로 호출해준다.
   * 따라서 "직접 스프링 빈으로 등록" 하면 종료메서드는 따로 적어주지 않아도 동작
   * 추론 기능을 이용하기 싫으면 destroyMethod="" 처럼 빈 공백을 지정하면 된다.
-  
+
+* ### @PostConstruct, @PreDestroy 어노테이션 
+  * 최신 스프링에서 가장 권장하는 방법이다. 
+  * 어노테이션 하나만 붙이면 되므로 매우 편리
+
+* ### 정리
+  * >   @PostConstruct, @PreDestroy 어노테이션을 사용하자.
+    > 단 코드를 고칠 수 없는 외부 라이브러리를 초기화 , 종료 해야하면 @Bean의 initMethod, destroyMethod를 사용하자.

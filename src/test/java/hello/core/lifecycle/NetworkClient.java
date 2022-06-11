@@ -3,6 +3,9 @@ package hello.core.lifecycle;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 public class NetworkClient {
     private String url;
 
@@ -30,6 +33,7 @@ public class NetworkClient {
     }
 
 
+    @PostConstruct
     public void init() {
         // 의존관계 주입이 끝나면 호출됨
         System.out.println("NetworkClient.init");
@@ -38,6 +42,7 @@ public class NetworkClient {
     }
 
 
+    @PreDestroy
     public void close(){
         // 빈이 소멸되기 전에 호출
         System.out.println("NetworkClient.close");
