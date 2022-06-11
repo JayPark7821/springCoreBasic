@@ -664,3 +664,11 @@ AppConfig 클래스를 상속받은 임의의 다른 클래스를 만들고, 그
   - 인터페이스(InitializingBean, DisposableBean)
   - 설정 정보에 초기화 메서드, 종료 메서드 지정
   - @PostConstruct, @PreDestroy 애노테이션 지원
+
+* ### 설정 정보에 초기화 메서드, 종료 메서드 지정
+  * @Bean destroyMethod속성에는 아주 특별한 기능이있다.
+  * @Bean destroyMethod 기본값이 (inferred)(추론)으로 등록되어있다.
+  * close , shutdown 라는 이름의 메서드를 자동으로 호출해준다.
+  * 따라서 "직접 스프링 빈으로 등록" 하면 종료메서드는 따로 적어주지 않아도 동작
+  * 추론 기능을 이용하기 싫으면 destroyMethod="" 처럼 빈 공백을 지정하면 된다.
+  
