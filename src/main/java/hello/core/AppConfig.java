@@ -19,8 +19,12 @@ public class AppConfig{
     // 어플리케이션 전체 구성이 어떻게 되어있는지 빠르게 파악할 수 있다.
 
     // ctrl + alt + m
+
+    // @Bean memberService -> new MemoryMemberRepository()
+    // @Bean orderService -> new MemoryMemberRepository()
     @Bean
     public MemberRepository memberRepository() {
+        System.out.println("Call AppConfig.memberRepository");
         return new MemoryMemberRepository();
     }
     @Bean
@@ -31,11 +35,13 @@ public class AppConfig{
 
     @Bean
     public MemberService memberService(){
+        System.out.println("Call AppConfig.memberService");
         return new MemberServiceImpl(memberRepository());
     }
 
     @Bean
     public OrderService orderService(){
+        System.out.println("Call AppConfig.orderService");
         return new OrderServiceImpl(memberRepository(), discountPolicy());
     }
 
